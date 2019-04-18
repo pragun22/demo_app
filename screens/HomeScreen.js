@@ -23,13 +23,30 @@ const Form = t.form.Form;
 export default class HomeScreen extends React.Component {
   addComment = () => {
     const val =  this._form.getValue();
-    console.log("value:  ");
-    console.log(val);
+    // console.log("value:  ");
+    // console.log(val);
+   
+    // function to push comments
     db.ref('/Comment').push({
       uniqueid : 1,
       text : val.txt,
       userid : val.userid,
       createDate : val.date
+    });
+    // function to increase count of user and then see if 5 comments are done or not 
+    db.ref('User').orderByChild("name").equalTo(val.userid).once("child_added", snapshot=>{
+      let newcnt = snapshot.val().comcnt + 1;
+      if (newcnt == 5){
+        db.ref('/Comment').orderByChild("userid").equalTo(val.userid).once("child_added", comdata => {
+          console.log(comdata.val());
+          var loop_count = 0;
+          //since this is the first data and data are added on basis of time so directly delete it
+          comdata.ref.remove();
+        })
+        newcnt = 4;
+      }
+      snapshot.ref.update({comcnt: newcnt});
+      console.log(snapshot.val());
     });
   };
   static navigationOptions = {

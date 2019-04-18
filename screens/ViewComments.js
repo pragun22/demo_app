@@ -24,25 +24,34 @@ export default class ViewComment extends React.Component {
   };
   componentDidMount(){
     commentsData.on('value', (data) => {
-      let items = Object.values(data.val());
-      this.setState({items});
+      var dat = data.val();
+      if( dat != null){
+        let items = Object.values(dat);
+        this.setState({items});
+      }
+      else{
+        err = {
+          userid : 'no user',
+          createDate : 'nil',
+          text: 'Currently no comments to show'
+        }
+        this.setState({err})
+      }
     });
   }
   render() {
-    console.log(this.state.items);
     return (
-      <View style={styles.itemsList}>
+      <ScrollView>
       {this.state.items.map((item, index) => {
             return (
-                <ScrollView key={index}>
+                <View key={index} style={styles.itemsList}>
                     <Text style={styles.itemtext}>Comment made by User: {item.userid}</Text>
                     <MonoText>created on {item.createDate}</MonoText>
                     <Text style={styles.itemcom}>{item.text}</Text>
-
-                </ScrollView>
+                </View>
             )
         })}
-      </View>
+      </ScrollView>
     );
   }
 }
