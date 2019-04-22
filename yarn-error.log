@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add Button
+  /usr/bin/node /usr/share/yarn/bin/yarn.js add firebase
 
 PATH: 
   /home/pragun/.npm-global/bin:/home/pragun/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin

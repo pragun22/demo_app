@@ -14,11 +14,12 @@ import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
 import { db } from '../config.js';
 
-let commentsData = db.ref('/Comment')
+let commentsData = db.ref('/Comment');
 export default class ViewComment extends React.Component {
   state = {
-    items : []
+    items : [],
   }
+  usernames = [];
   static navigationOptions = {
     header: null,
   };
@@ -40,17 +41,20 @@ export default class ViewComment extends React.Component {
     });
   }
   render() {
+    db.ref('/User').orderByChild("uid").equalTo(this.state.userid).once("child_added", snapshot=>{
+      usernames.push(snapshot.val().name);
+    });
     return (
       <ScrollView>
       {this.state.items.map((item, index) => {
-            return (
-                <View key={index} style={styles.itemsList}>
-                    <Text style={styles.itemtext}>Comment made by User: {item.userid}</Text>
+        return (
+          <View key={index} style={styles.itemsList}>
+                    <Text style={styles.itemtext}>Comment made by User: {usernames[index]}</Text>
                     <MonoText>created on {item.createDate}</MonoText>
                     <Text style={styles.itemcom}>{item.text}</Text>
                 </View>
             )
-        })}
+          })}
       </ScrollView>
     );
   }
